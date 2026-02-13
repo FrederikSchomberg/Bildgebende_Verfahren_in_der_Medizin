@@ -14,7 +14,6 @@ print("z =", z, "\n")
 
 #1.2
 print("-----------Aufgabe 1.2-------------")
-# (In einem Skript werden die Anweisungen einfach nacheinander ausgeführt.)
 x = 1
 y = 1
 z = x + y
