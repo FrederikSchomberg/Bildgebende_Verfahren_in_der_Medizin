@@ -2,7 +2,8 @@ import os
 import numpy as np
 import cv2
 import matplotlib.pyplot as plt
-import skimage as ski 
+import skimage as ski
+import pydicom
     
 #2.1
 def a1():
@@ -227,16 +228,76 @@ def a6():
     plt.tight_layout()
     plt.show()
 
-
-
-
 #2.7
-print("-----------Aufgabe 2.7-----------")
-#2.8
-print("-----------Aufgabe 2.8-----------")
-#2.9
-print("-----------Aufgabe 2.9-----------")
+def a7():
+    print("-----------Aufgabe 2.7-----------")
 
+    I = cv2.imread("roentgen_fuss.jpg", cv2.IMREAD_GRAYSCALE)
+    if I is None:
+        print("Fehler: roentgen_fuss.jpg konnte nicht geladen werden.")
+        return
+
+    plt.figure(figsize=(10, 4))
+    plt.subplot(1, 2, 1)
+    plt.imshow(I, cmap="gray")
+    plt.title("Original")
+    plt.axis("off")
+
+    plt.subplot(1, 2, 2)
+    plt.hist(I.ravel(), bins=256, range=(0, 255))
+    plt.title("Histogramm")
+    plt.tight_layout()
+    plt.show()
+
+    thresholds = [60, 100, 140]
+
+    plt.figure(figsize=(12, 6))
+
+    plt.subplot(2, 2, 1)
+    plt.imshow(I, cmap="gray")
+    plt.title("Original")
+    plt.axis("off")
+
+    # Binarisierungen
+    for k, t in enumerate(thresholds):
+        _, I_bin = cv2.threshold(I, t, 255, cv2.THRESH_BINARY)
+
+        plt.subplot(2, 2, k + 2)
+        plt.imshow(I_bin, cmap="gray")
+        plt.title(f"THRESH_BINARY, t={t}")
+        plt.axis("off")
+
+    plt.tight_layout()
+    plt.show()
+
+def a8():
+    print("-----------Aufgabe 2.8-----------")
+
+    fname = "xr_Laura.dcm"
+    dc = pydicom.dcmread(fname)
+
+    print(dc)
+    
+#2.9
+def a9():
+    print("-----------Aufgabe 2.9-----------")
+
+    fname = "xr_Laura.dcm"
+    ds = pydicom.dcmread(fname)
+
+    I = ds.pixel_array  # Bildmatrix als NumPy-Array
+
+    print("I.shape:", I.shape)
+    print("I.dtype:", I.dtype)
+
+    plt.figure(figsize=(6, 6))
+    plt.imshow(I, cmap="gray")
+    plt.axis("off")
+    plt.title("xr_Laura.dcm")
+    plt.tight_layout()
+    plt.show()
+    
+    
 if __name__ == "__main__":
 
     print("Aktuelles Arbeitsverzeichnis:", os.getcwd())
@@ -245,7 +306,7 @@ if __name__ == "__main__":
     zielpfad = os.path.join(os.getcwd(), ordnername)
     print("Pfad mit os.path.join():", zielpfad)
 
-    # wechseln, falls der Ordner existiert damit das Skript nicht crasht
+    # wechseln, falls der ordner existiert damit das skript nicht crasht
     if os.path.exists(zielpfad):
         os.chdir(zielpfad)
         print("Gewechselt nach:", os.getcwd())
@@ -257,4 +318,8 @@ if __name__ == "__main__":
     #a3()
     #a4()
     #a5()
-    a6()
+    #a6()
+    #a7()
+    #a8()
+    a9()
+    
