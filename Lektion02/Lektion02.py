@@ -121,18 +121,18 @@ def a5():
         print("Fehler: phantom.jpg konnte nicht geladen werden.")
         return
 
-    # 2) In float [0,1] umwandeln (für random_noise)
+    # 2) in float [0,1] umwandeln (für random noise)
     I = I_u8.astype(np.float32) / 255.0
 
-    # 3) Weißes Rauschen (Gaussian) mit verschiedenen Varianzen
+    # 3) weißes rauschen (gaussian) 
     I_g1 = ski.util.random_noise(I, mode="gaussian", mean=0.0, var=0.001)
     I_g2 = ski.util.random_noise(I, mode="gaussian", mean=0.0, var=0.01)
 
-    # 4) Salt-and-Pepper mit verschiedenen amount-Werten
+    # 4) aalt & pepper mit verschiedenen werten
     I_sp1 = ski.util.random_noise(I, mode="s&p", amount=0.02)
     I_sp2 = ski.util.random_noise(I, mode="s&p", amount=0.10)
 
-    # 5) Zurück nach uint8 [0,255] (für imshow + hist wie gewohnt)
+    # zurück nach uint8 [0,255]
     def to_u8(X):
         return np.clip(X * 255.0, 0, 255).astype(np.uint8)
 
@@ -141,10 +141,10 @@ def a5():
     I_sp1_u8 = to_u8(I_sp1)
     I_sp2_u8 = to_u8(I_sp2)
 
-    # 6) Anzeige + Histogramme (jeweils Bild + Histogramm)
+    # anzeige + histogramme
     plt.figure(figsize=(12, 10))
 
-    # Original
+    # original
     plt.subplot(3, 4, 1)
     plt.imshow(I_u8, cmap="gray")
     plt.title("Original")
@@ -153,7 +153,7 @@ def a5():
     plt.hist(I_u8.ravel(), bins="auto")
     plt.title("Hist Original")
 
-    # Gaussian var=0.001
+    # gaussian var=0.001
     plt.subplot(3, 4, 5)
     plt.imshow(I_g1_u8, cmap="gray")
     plt.title("Gaussian var=0.001")
@@ -162,7 +162,7 @@ def a5():
     plt.hist(I_g1_u8.ravel(), bins=256, range=(0, 255))
     plt.title("Hist Gaussian 0.001")
 
-    # Gaussian var=0.01
+    # gaussian var=0.01
     plt.subplot(3, 4, 9)
     plt.imshow(I_g2_u8, cmap="gray")
     plt.title("Gaussian var=0.01")
@@ -171,7 +171,7 @@ def a5():
     plt.hist(I_g2_u8.ravel(), bins=256, range=(0, 255))
     plt.title("Hist Gaussian 0.01")
 
-    # Salt & Pepper amount=0.02
+    # salt & pepper amount=0.02
     plt.subplot(3, 4, 3)
     plt.imshow(I_sp1_u8, cmap="gray")
     plt.title("S&P amount=0.02")
@@ -180,7 +180,7 @@ def a5():
     plt.hist(I_sp1_u8.ravel(), bins=256, range=(0, 255))
     plt.title("Hist S&P 0.02")
 
-    # Salt & Pepper amount=0.10
+    # salt & pepper amount=0.10
     plt.subplot(3, 4, 7)
     plt.imshow(I_sp2_u8, cmap="gray")
     plt.title("S&P amount=0.10")
@@ -193,7 +193,43 @@ def a5():
     plt.show()
 
 #2.6
-print("-----------Aufgabe 2.6-----------")
+def a6():
+    print("-----------Aufgabe 2.6-----------")
+
+    I = cv2.imread("roentgen_thorax.jpg", cv2.IMREAD_GRAYSCALE)
+
+    if I is None:
+        print("Fehler: roentgen_thorax.jpg konnte nicht geladen werden.")
+        return
+
+    rows, cols = I.shape
+    print("Original shape:", I.shape)
+
+    # viertel der bildgröße = halb so viele zeilen und halb so viele spaltn
+    new_rows = rows // 2
+    new_cols = cols // 2
+
+    I_small = cv2.resize(I, (new_cols, new_rows))
+    print("Verkleinert shape:", I_small.shape)
+
+    plt.figure(figsize=(10, 4))
+
+    plt.subplot(1, 2, 1)
+    plt.imshow(I, cmap="gray")
+    plt.title("Original")
+    plt.axis("off")
+
+    plt.subplot(1, 2, 2)
+    plt.imshow(I_small, cmap="gray")
+    plt.title("1/4 Größe")
+    plt.axis("off")
+
+    plt.tight_layout()
+    plt.show()
+
+
+
+
 #2.7
 print("-----------Aufgabe 2.7-----------")
 #2.8
@@ -220,4 +256,5 @@ if __name__ == "__main__":
     #a2()
     #a3()
     #a4()
-    a5()
+    #a5()
+    a6()
